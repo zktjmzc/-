@@ -1,0 +1,221 @@
+1、两数之和：哈希函数：（1）功能：输入数据，返回函数
+                                    （2）特点：不同的参数，输出不同的整数；相同的参数，输出相同的整数。比如说不同的商品，有不同的价格，价格名通过哈希函数与一个整数建立联系，而这个整数去对应一个目标值，在此基础上，当输入商品名时，系统会通过哈希函数找到相应的参数，并调用整数对应的目标值。而由目标值构成的数组称为“哈希表。”
+                                    （3）语法：1、首先是从标准数据库中调用哈希函数，#include<unordered_map>
+2、然后建立一个空的哈希函数容器，即声明和初始化；unordered_map<elemType_1,elemType_2>var_name;   //声明一个没有任何元素的哈希表
+                                                                                                                             unordered_map<int,int>map;    
+                                                                         unordered_map<int,int> hmap{{1,10},{2,11},{3,15}}   //如果知道要创建的哈希表的元素个数。                                                                 
+                                                                                                                              unordered_map<int,int> hmap{{1,10},{2,11},{3,15}，3}  //在初始化列表中指定元素个数
+其中的{1,10}分别指的是位置为1和添加的元素，
+3、通过下标运算来添加元素：hmap[4]=14; hmap [4]=15;但这样会出现一个问题，当[]中的key 存储位置有存储数值，再用hamp[]去添加元素，会将原哈希表中key的元素覆盖                             
+4、通过insert（）函数来添加元素，hmap.insert({5,16});hmap.inset({5,16});与下标添加函数的方法类似，但是起避免了数值的覆盖，当在key的位置有元素时，再对key的元素进行赋值，系统会报错。
+5、复制构造：通过原来初始化过的哈希表来构建新的哈希表：unordered_map<int,int> hmap1（hmap）;
+6、查看当前编写程序内存大小的代码是：ps aux 
+7、在小型程序或快速原型开发中，使用 using namespace std; 可以减少代码中的冗长，但在大型项目或与其他库一起使用时，它可能导致命名冲突和代码难以维护。因此，建议在大型项目中避免全局使用 using namespace std;，而是使用 std:: 前缀来明确指定标准库的命名空间。
+
+8、字母移动进行加密
+     要求如下：将26个字母加密，方式是向后移动7个单位，如a=h，z=g，且写出相对称的解密
+
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main(){
+    string s1("abcdefghijklmnopqrstuvwxyz")
+    for(int i=0;i<25;i++){  
+       s1[i]=(s1[i]-'a'+7)%26+'a';          //这里的'a'代表了a的ACSLL值97，以此来方便之后的替代；这里很巧妙的利用取模的方法解决了从字母尾部转到前面字母
+}
+for(num2=0;num2<150;num2++){  
+    char num1;      
+    cout<<"请输入你要加密的字母"<<endl;
+       cin>>num1; 
+       if('a'<=num1&&num1<='z'){
+      cout<<“加密后的结果为：”<<s1[num1]<<endl;
+    }
+    else{cout<<"你输入的结果有误"<<endl;}
+}
+    return 0
+}
+
+
+解密程序
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s1("abcdefghijklmnopqrstuvwxyz");
+
+    for (int i = 0; i < 26; i++) {
+        s1[i] = (s1[i] - 'a' + 7) % 26 + 'a'; // 加密逻辑
+    }
+
+    for (int num2 = 0; num2 < 150; num2++) {
+        char j;
+        cout << "请输入要解密的字母" << endl;
+        cin >> j;
+        if ('a' <= j && j <= 'z') {
+            int decrypted = -1;
+            for (int i = 0; i < 26; i++) {
+                if (s1[i] == j) {                //利用位置不变，字母改变的情况，找到加密后其所处在的位置
+                    decrypted = i;
+                    break;
+                }
+            }
+            if (decrypted != -1) {
+                cout << "解密后的字母为：" << char(decrypted + 'a') << endl;         //将需要解密的字母相对于a的位置加a，这样的解密方式适合不管是多少的位移
+            } else {
+                cout << "无法解密该字符" << endl;
+            }
+        } else {
+            cout << "你输入的字母有误" << endl;
+        }
+    }
+
+    return 0;
+}
+
+
+9、字符串的排序
+     问题如下：要求用冒泡排序的方法对于字符串进行排序，且字符串的长度和内容都需使用cin进行输入
+     #include<iostream>
+#include<vector>                                                     //调用标准库中的容器类，用于实现动态数组
+using namespace std;
+
+
+void num1(vector<string> arr, int j) {                               //由于数组的长度必须为常量，由于此时长度是不知道的，因此创建一个动态的字符串数组
+	for (int i = 0; i < j - 1; i++) {
+		for (size_t y = 0; y <size_t(j - i - 1); y++) {                //这里要用用size_t来进行整形的初始化定义，这样可以避免溢出的问题
+			if (arr[y] < arr[y + 1]) {
+				string temp = arr[y];
+				arr[y] = arr[y+1];
+				arr[y + 1] = temp;
+				
+			}
+		}
+	}
+}
+int main() {
+	int hang;
+	cout << "请输入要进行排序的字符串的数量" << endl;
+	cin >> hang;
+	vector<string> s1;
+	for (int j = 0; j < hang; j++) {
+		string num2;
+		cout << "请输入字符串" << endl;
+		cin >> num2;
+		s1.push_back(num2);
+}
+	num1(s1, hang);
+	for (int k = 0; k < hang; k++) {
+		cout << s1[k] << endl;
+	}
+}
+
+
+此题的收获：（1）当在创建一个数组的时候如果不知道数组的行列，可以调用标准库中的vector（容量类）来创建一个动态数组
+           （2）“对于局部变量在被分配到更广的类型前，子表达式可能会溢出”的解决方法，对于被进行该提示的局部变量变化为static_cast<要明确的类型>（局部变量名）
+           （3）类型提升：一种隐式类型转换，用于确保不同类型的操作数在进行运算时拥有相同的数据类型，这样做通常是为了保持精度或避免数据损失。
+                                         可分为这几种：整型提升，在整型运算中将较小的整数类型提升为较大的整数型，例如将“short”与“int”相加，“short”会被自动转化为“int”
+                                                               整数提升至浮点数：进行更近准的计算
+                                                               枚举型提升：枚举类型的值通常会被提升为具有最够容量的整数类型
+                                                               字符类型：通常会被提升为整数型
+                                                               类型提升的优先级：如果不同类型的操作数需要提升，编译器会把它们提升为具有更高优先级的数据类型，例如short会被提升为int，而int会被提升为double
+           （4）size_t无符号整数类型：循环变量的初始化值可以写成size_t的形式，尤其是在数组索引和保持非负整数值时，当让并不是所有的循环都可以用无符号整型，例如当初始值为负值时，或者与其它整型交互时。
+    	                         
+10、班级的信息输入
+       问题创建一个Class类，并且有两个函数构造函数，一个为默认构造函数，另一个为含两个参数（班级名称、专业名称）的结构体变量，还有一个是display（）函数，输出班级信息。
+#include <iostream>
+#include <string>
+
+class Class {
+public:
+    // 默认构造函数
+    Class() {
+        className = "未定义";
+        majorName = "未定义";
+    }
+
+    // 带参数的构造函数
+    Class(const std::string& classN, const std::string& majorN) {
+        className = classN;
+        majorName = majorN;
+    }
+
+    // 成员函数用于显示班级信息
+    void display() {
+        std::cout << "班级名称: " << className << std::endl;
+        std::cout << "专业名称: " << majorName << std::endl;
+    }
+
+private:
+    std::string className;
+    std::string majorName;
+};
+
+int main() {
+    // 使用默认构造函数创建对象
+    Class class1;
+    std::cout << "默认构造函数创建的对象：" << std::endl;
+    class1.display();
+
+    // 使用带参数的构造函数创建对象
+    Class class2("计算机科学", "计算机工程");
+    std::cout << "\n带参数的构造函数创建的对象：" << std::endl;
+    class2.display();
+
+    return 0;
+}
+
+总结：在创建一个类中一般只有一个结构体函数，如果创建多个构造体函数，则需要进行重载，在创建的对象的时候用哪个结构体函数看对象最终输入的参数。
+          结构体函数一般只用来初始化变量，而不用来修改变量，其它成员函数则可以。且构造体函数一般不用来输出内容，如果想要输出内容，可以在构造体函数内部cout输出
+
+11、账户
+    问题是创建一个account类，其中包含两个成员数据（账户姓名，账户的余额），创建一个构造体函数，对数据成员初始化，并检验初始化，并保障初始余额的有效性，提供成员函数deposit存款，withdraw取款，取款时检查余额是否足够，否则维持原余额，并打印信息“余额不足”。
+    public:
+    account(string b, int r) {
+        num1 = r;
+        name = b;
+    };
+    void deposit() {
+        if (num1 < 0) {
+            cout << "你输入的结果有误" << endl;
+        }
+        else {
+            int ru;
+            cout << "请输入要存款的金额" << endl;
+            cin >> ru;
+            num1 += ru;
+        }
+    }
+    void withdraw() {
+        if (num1 < 0) {
+            cout << "您的余额不足" << endl;
+        }
+        else {
+            int cun;
+            cout << "请输入要取款的金额" << endl;
+            cin >> cun;
+            if (num1 - cun < 0) {
+                cout << "您的余额不足，无法取款" << endl;
+            }
+            else {
+                num1 -= cun; 
+                cout << "你剩下的余额为" << num1;
+            }
+         }
+    }
+private:
+    int num1;
+    string name;
+};
+
+#endif // 结束条件
+
+总结：这一题较为简单，值得总结的只有一点，即使类的名称不要和防卫式声明的声明名称一致，否则会因为定义宏不一致而报错。
+
+12、最长子字符串：
+（1）在字符串中字符串的休止符为\0,例如：for(int i=0;arr[i]!="\0";i++),其意思是当数组等于字符创休止时循环停止
+
+
+
+                                                           
