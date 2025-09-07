@@ -1,0 +1,244 @@
+SELECT Sname,Ssex,class 
+FROM student;
+
+SELECT DISTINCT teacher.Depart
+FROM teacher;
+
+SELECT *
+FROM student;
+
+SELECT Degree
+FROM score
+WHERE Degree BETWEEN 60 AND 80;
+
+SELECT *
+FROM score
+WHERE Degree=85 OR Degree=86 OR Degree=88;
+
+SELECT *
+FROM student s
+WHERE s.Ssex='女' OR s.class=95031;
+
+SELECT *
+FROM score
+ORDER BY Cno ASC;
+
+SELECT *
+FROM score
+ORDER BY Degree DESC;
+
+SELECT *
+FROM student
+ORDER BY class DESC;
+
+SELECT class,count(s.Sno) AS '人数'
+FROM student s
+GROUP BY class;
+
+SELECT max(score.Degree) AS '最高分',MIN(score.Degree) AS '最低分'
+FROM score;
+
+SELECT s.Cno,AVG(s.Degree)
+FROM score s
+GROUP BY s.Cno;
+
+SELECT student.Sno, student.class
+FROM student
+WHERE Sno = (
+    SELECT score.Sno
+    FROM score
+    WHERE score.Degree = (
+        SELECT MAX(Degree) FROM score
+    )
+);
+
+SELECT score.Cno,AVG(score.Degree)
+FROM score
+GROUP BY score.Cno;
+
+SELECT score.Cno,AVG(score.Degree) AS '平均分'
+FROM score
+WHERE score.Cno LIKE '3%'
+GROUP BY score.Cno
+HAVING COUNT(score.Sno)>=5;
+
+SELECT s.Sno
+FROM score s
+WHERE s.Degree BETWEEN 70 AND 90;
+
+SELECT st.Sname,sc.Cno,sc.Degree
+FROM student AS st
+JOIN score AS sc USING(Sno)
+
+SELECT st.Sname,course.Cno,sc.Degree
+FROM score AS sc
+JOIN student AS st USING(Sno)
+JOIN course USING(Cno);
+
+SELECT AVG(Degree) AS '平均分'
+FROM score sc
+JOIN student USING(Sno)
+WHERE student.class=95033;
+
+SELECT s.Sname,sc.Cno,sc.Degree,
+CASE
+	WHEN sc.Degree>=90 THEN 
+	  'A'
+	WHEN sc.Degree BETWEEN 80 AND 90 THEN
+		'B'
+	WHEN sc.Degree BETWEEN 70 AND 80 THEN
+	  'C'
+	WHEN sc.Degree BETWEEN 60 AND 70 THEN
+	  'D'
+	WHEN sc.Degree <60 THEN
+	  'E'
+END AS rank
+FROM student s
+JOIN score AS sc USING(Sno);
+
+SELECT s.Sname, sc.Cno, sc.Degree,
+  CASE 
+    WHEN sc.Degree >= 90 THEN 'A'
+    WHEN sc.Degree >= 80 THEN 'B'
+    WHEN sc.Degree >= 70 THEN 'C'
+    WHEN sc.Degree >= 60 THEN 'D'
+    ELSE 'E'
+  END AS `rank`
+FROM student s
+JOIN score sc USING(Sno);
+
+SELECT *
+FROM student s
+JOIN score USING(Sno)
+WHERE score.Cno='3-105' AND score.Degree>(SELECT score.Degree FROM score WHERE Degree=79);
+
+SELECT s.Sno,s.Sname,s.Sbirthday
+FROM student s
+WHERE s.Sbirthday=(SELECT student.Sbirthday FROM student WHERE student.Sno=108);
+
+SELECT teacher.Tname
+FROM course c
+JOIN teacher USING(Tno)
+JOIN score USING (Cno)
+GROUP BY Cno
+HAVING COUNT(Sno)>5
+
+SELECT *
+FROM student
+WHERE class=95033 OR 95031;
+
+SELECT DISTINCT score.Cno
+FROM score
+WHERE score.Degree>85;
+
+SELECT 
+    s.Sname,
+    c.Cname,
+    sc.Degree
+FROM 
+    Teacher t
+JOIN 
+    Course c ON t.Tno = c.Tno
+JOIN 
+    Score sc ON c.Cno = sc.Cno
+JOIN 
+    Student s ON sc.Sno = s.Sno
+WHERE 
+    t.Depart = '计算机系';
+		
+SELECT Depart,COUNT(Prof) AS '职称种类'
+FROM teacher
+GROUP BY Depart;
+
+SELECT *
+FROM student st
+JOIN score USING(Sno)
+WHERE score.Cno='3-105' AND 
+score.Degree>(SELECT MAX(score.Degree) FROM score WHERE score.Cno='3-245')
+ORDER BY score.Degree DESC;
+
+SELECT *
+FROM student st
+JOIN score USING(Sno)
+WHERE score.Cno='3-105' AND 
+score.Degree>(SELECT MIN(score.Degree) FROM score WHERE score.Cno='3-245')
+ORDER BY score.Degree DESC;
+
+SELECT s.Sname,s.Ssex,s.Sbirthday
+FROM student s
+UNION
+SELECT t.Tname,t.Tsex,t.Tbirthday
+FROM teacher t;
+
+SELECT 
+    s.Sname,
+    c.Cname,
+    sc.Degree
+FROM 
+    Score sc
+JOIN 
+    Student s ON sc.Sno = s.Sno
+JOIN 
+    Course c ON sc.Cno = c.Cno
+WHERE 
+    sc.Degree < (
+        SELECT AVG(Degree)
+        FROM Score
+        WHERE Cno = sc.Cno
+    );
+
+SELECT t.Tname,t.Depart
+FROM teacher t
+LEFT JOIN course USING(Tno)
+WHERE course.Cno IS NULL;
+
+SELECT class
+FROM Student 
+WHERE Ssex LIKE '%男%'
+GROUP BY class
+HAVING COUNT(Ssex)>=2;
+
+SELECT *
+FROM student
+WHERE student.Sname NOT LIKE '王%';
+
+SELECT *
+FROM student s
+ORDER BY Sbirthday DESC
+LIMIT 1
+
+SELECT *
+FROM student s
+ORDER BY Sbirthday ASC
+LIMIT 1
+
+SELECT *
+FROM student
+ORDER BY student.class DESC,student.Sbirthday DESC;
+
+SELECT t.Tname,course.Cname
+FROM teacher t
+JOIN course USING(Tno)
+WHERE t.Tsex LIKE '%男%';
+
+SELECT *
+FROM score
+ORDER BY Degree DESC
+LIMIT 1;
+
+SELECT s.Sname
+FROM student s
+WHERE s.Ssex=(SELECT student.Ssex FROM student WHERE student.Sname LIKE '%李军%');
+
+SELECT 
+    s.Sname,
+    s.Ssex,
+    sc.Degree
+FROM 
+    Student s
+JOIN 
+    Score sc ON s.Sno = sc.Sno
+JOIN 
+    Course c ON sc.Cno = c.Cno
+WHERE 
+    s.Ssex = '男' AND c.Cname = '计算机导论';
